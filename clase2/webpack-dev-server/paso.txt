@@ -1,0 +1,31 @@
+mkdir simple-webpack-example
+
+cd simple-webpack-example
+
+npm init -y
+
+npm install --save-dev webpack webpack-cli webpack-dev-server typescript ts-loader html-webpack-plugin
+
+estructura:
+
+simple-webpack-example/
+│
+├── src/
+│   ├── index.ts
+│   └── index.html
+├── package.json
+├── tsconfig.json
+└── webpack.config.js
+
+
+
+add package.json:
+
+"scripts": {
+  "dev": "webpack serve --open"
+}
+
+npm run dev
+
+npm run build
+npm run builddev

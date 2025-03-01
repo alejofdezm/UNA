@@ -1,0 +1,1 @@
+(()=>{"use strict";var e;(e=document.getElementById("app"))&&(e.innerHTML="<p>¡Hola! Esta es una aplicación sencilla con Webpack, TypeScript usando  webpack-dev-server.</p>")})();

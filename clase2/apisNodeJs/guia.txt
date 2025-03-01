@@ -1,0 +1,10 @@
+mkdir apisNodeJs
+cd apisNodeJs
+
+npm init -y
+npm install express
+
+npm install dotenv
+
+
+nano server.js
