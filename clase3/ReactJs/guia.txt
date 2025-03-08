@@ -1,0 +1,7 @@
+primero instalar: npx create-react-app miscomponentes --template typescript
+cd miscomponentes
+
+
+Activar para pruebas: npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+
+npm start 
