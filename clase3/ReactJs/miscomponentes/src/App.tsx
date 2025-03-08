@@ -5,6 +5,7 @@ import AboutReactJs from "./AboutReact";
 import { SaludarAlProfe } from "./saludos/SaludarAlProfe";
 import Counter from "./hook/Counter";
 import CounterParaPruebas from "./Pruebas/CounterParaPruebas";
+import RecordList from "./components/RecordList";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Counter />
 
         <CounterParaPruebas />
+
+        <RecordList />
       </header>
     </div>
   );
