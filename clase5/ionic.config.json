@@ -1,0 +1,7 @@
+{
+  "name": "clase5",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
