@@ -19,13 +19,14 @@ const LoginEmailAndPassword: React.FC = () => {
     try {
       await authReady;
       await signInWithEmailAndPassword(auth, email, password).then(() => {
-        setLoading(false);
+        
         history.replace("/home");
       });
     } catch (error: any) {
-      setLoading(false);
+       
       setError(error.message);
     }
+    setLoading(false);
   };
 
   if (loading) {

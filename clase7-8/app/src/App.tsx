@@ -45,7 +45,7 @@ import Perfil from "./pages/Perfil";
 setupIonicReact();
 
 const App: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuth(); 
 
   return (
     <IonApp>

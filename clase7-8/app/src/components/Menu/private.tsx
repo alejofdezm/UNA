@@ -10,7 +10,7 @@ export const MenuLoggedIn = () => {
       </IonTabButton>
       <IonTabButton tab='tab2' href='/tab2'>
         <IonIcon aria-hidden='true' icon={ellipseOutline} />
-        <IonLabel>Tab 2</IonLabel>
+        <IonLabel>Perfil</IonLabel>
       </IonTabButton>
       <IonTabButton tab='tab3' href='/tab3'>
         <IonIcon aria-hidden='true' icon={triangle} />

@@ -26,4 +26,4 @@ const authReady = setPersistence(auth, browserLocalPersistence)
     console.error("Error al configurar la persistencia:", error);
   });
  
-export { auth, db, firebaseConfig, authReady };
+export { auth, db,  authReady };
