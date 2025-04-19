@@ -1,14 +1,12 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import "./Home.css";
+import AppHeader from "../components/head/AppHeader";
+import FirebaseStatus from "../components/cargarServicio";
 
 const Home: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Home</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <AppHeader title='Home - Notifaciones' showMenuButton={true} />
       <IonContent fullscreen>
         <IonHeader collapse='condense'>
           <IonToolbar>
@@ -17,6 +15,7 @@ const Home: React.FC = () => {
         </IonHeader>
       </IonContent>
       <h1>Home</h1>
+      <FirebaseStatus />
     </IonPage>
   );
 };
