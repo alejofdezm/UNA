@@ -1,22 +1,26 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import HandleGoogleSignIn from "../../components/firebase/authentication";
+import LoginEmailAndPassword from "../../components/firebase/loginEmailAndPassword";
 
-const Notificaciones: React.FC = () => {
+const Login: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Suscribir Tema</IonTitle>
+          <IonTitle>Ingreso</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse='condense'>
           <IonToolbar>
-            <IonTitle size='large'>Suscribir Tema</IonTitle>
+            <IonTitle size='large'>Ingreso</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <LoginEmailAndPassword />
+        <HandleGoogleSignIn />
       </IonContent>
     </IonPage>
   );
 };
 
-export default Notificaciones;
+export default Login;
