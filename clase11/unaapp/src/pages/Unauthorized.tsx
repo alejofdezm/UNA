@@ -1,24 +1,22 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import TopicSubscription from "../components/notification/TopicSubscription";
 
-const Notificaciones: React.FC = () => {
+const Unauthorized: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Suscribir a Tema</IonTitle>
+          <IonTitle>Unauthorized</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse='condense'>
           <IonToolbar>
-            <IonTitle size='large'>Suscribir a Tema</IonTitle>
+            <IonTitle size='large'>Unauthorized</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <TopicSubscription />
       </IonContent>
     </IonPage>
   );
 };
 
-export default Notificaciones;
+export default Unauthorized;

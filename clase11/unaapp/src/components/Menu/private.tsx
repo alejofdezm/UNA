@@ -1,5 +1,5 @@
 import { IonIcon, IonLabel, IonTabBar, IonTabButton } from "@ionic/react";
-import { ellipseOutline, homeOutline, triangle } from "ionicons/icons";
+import { homeOutline, locateOutline, personOutline, triangle } from "ionicons/icons";
 import { useAuth } from "../../contexts/authContext";
 
 export const MenuLoggedIn = () => {
@@ -16,9 +16,15 @@ export const MenuLoggedIn = () => {
           <IonLabel>Notificaciones</IonLabel>
         </IonTabButton>
       )}
+
+      <IonTabButton tab='location' href='/location'>
+        <IonIcon aria-hidden='true' icon={locateOutline} />
+        <IonLabel>Location</IonLabel>
+      </IonTabButton>
+
       {["admin", "user"].includes(user?.rol || "") && (
         <IonTabButton tab='perfil' href='/perfil'>
-          <IonIcon aria-hidden='true' icon={ellipseOutline} />
+          <IonIcon aria-hidden='true' icon={personOutline} />
           <IonLabel>Perfil</IonLabel>
         </IonTabButton>
       )}

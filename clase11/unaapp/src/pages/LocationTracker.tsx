@@ -1,24 +1,25 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import TopicSubscription from "../components/notification/TopicSubscription";
+import LocationTrackerComponent from "../components/location/locationTracker";
+import "../theme/location/tracker.css";
 
-const Notificaciones: React.FC = () => {
+const LocationTracker: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Suscribir a Tema</IonTitle>
+          <IonTitle>Location Tracker</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse='condense'>
           <IonToolbar>
-            <IonTitle size='large'>Suscribir a Tema</IonTitle>
+            <IonTitle size='large'>Location Tracker</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <TopicSubscription />
+        <LocationTrackerComponent />
       </IonContent>
     </IonPage>
   );
 };
 
-export default Notificaciones;
+export default LocationTracker;

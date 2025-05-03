@@ -2,6 +2,7 @@
 
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonSpinner, IonText } from "@ionic/react";
 import React, { useEffect, useState } from "react";
+import { ValidarCargarDeServicio } from "../../models/constantes";
 
 interface FirebaseStatus {
   initialized: boolean;
@@ -13,7 +14,7 @@ const FirebaseStatus: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://10.0.2.2:3000/api/firebase-status")
+    fetch(ValidarCargarDeServicio)
       .then((res) => res.json())
       .then((data) => {
         setStatus(data);

@@ -42,6 +42,8 @@ import Home from "./pages/Home";
 import Notificaciones from "./pages/Notificaciones";
 import Perfil from "./pages/Perfil";
 import PrivateRoute from "./routers/PrivateRoute";
+import Unauthorized from "./pages/Unauthorized";
+import LocationTracker from "./pages/LocationTracker";
 
 setupIonicReact();
 
@@ -61,11 +63,18 @@ const App: React.FC = () => {
 
             <PrivateRoute exact path='/notificaciones' allowedRoles={["admin"]} component={Notificaciones} />
 
+            <Route exact path='/location'>
+              <LocationTracker />
+            </Route>
+
             <Route exact path='/'>
               <Redirect to='/home' />
             </Route>
             <Route exact path='/login'>
               <Login />
+            </Route>
+            <Route exact path='/unauthorized'>
+              <Unauthorized />
             </Route>
           </IonRouterOutlet>
           {user ? <MenuLoggedIn /> : <MenuLoggedOut />}

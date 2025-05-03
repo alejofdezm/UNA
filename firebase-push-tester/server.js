@@ -183,12 +183,26 @@ app.post('/api/send-topic-notification', checkFirebaseInitialized, async (req, r
     }
 
     const message = {
+      
       notification: {
         title,
         body,
       },
       data: data || {},
-      topic
+      topic,
+      android: {
+        priority: 'high',
+      },
+      apns: {
+        headers: {
+          'apns-priority': '10',
+        },
+      },
+      webpush: {
+        headers: {
+          Urgency: 'high',
+        },
+      },
     };
 
     const response = await admin.messaging().send(message);
