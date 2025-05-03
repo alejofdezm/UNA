@@ -41,6 +41,7 @@ import Home from "./pages/Home";
 
 import Notificaciones from "./pages/Notificaciones";
 import Perfil from "./pages/Perfil";
+import PrivateRoute from "./routers/PrivateRoute";
 
 setupIonicReact();
 
@@ -55,12 +56,11 @@ const App: React.FC = () => {
             <Route exact path='/home'>
               <Home />
             </Route>
-            <Route exact path='/perfil'>
-              <Perfil />
-            </Route>
-            <Route path='/notificaciones'>
-              <Notificaciones />
-            </Route>
+
+            <PrivateRoute exact path='/perfil' allowedRoles={["admin", "user"]} component={Perfil} />
+
+            <PrivateRoute exact path='/notificaciones' allowedRoles={["admin"]} component={Notificaciones} />
+
             <Route exact path='/'>
               <Redirect to='/home' />
             </Route>

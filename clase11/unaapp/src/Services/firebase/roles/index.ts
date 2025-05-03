@@ -29,3 +29,34 @@ import { roluser } from "../../../models/roluser";
         return [];
       }
     };
+ 
+
+    
+    export const fetchUserRole = async (uid: string) : Promise<roluser> =>{
+
+      if (!uid) {
+        throw new Error("UID no proporcionado");
+      }
+
+      const queryRolUser = query(
+        collection(db, "roluser"),
+        where("user_id", "==", uid)
+      );
+    
+      const querySnapshot = await getDocs(queryRolUser);
+    
+      if (querySnapshot.empty) {
+        throw new Error("No se encontraron roles para el usuario");
+      }
+    
+      const firstDoc = querySnapshot.docs[0];
+    
+      const rolUsuario: roluser = {
+        id: firstDoc.id,
+        rol_id: firstDoc.data().user_id,
+        rol: firstDoc.data().rol || "user", 
+      };
+        
+        return rolUsuario;        
+      
+    };
