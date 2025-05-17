@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const admin = require('firebase-admin');
+const admin = require('firebase-admin'); // Ya lo tienes
 const path = require('path');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const fs = require('fs');
+
+const { VertexAI } = require('@google-cloud/vertexai'); // Asegúrate de que el nombre del paquete sea correcto
 
 // Cargar variables de entorno
 dotenv.config();
@@ -23,6 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 let firebaseInitialized = false;
 let firebaseError = null;
 
+// NUEVO: Variables para el cliente de Vertex AI
+let vertexAIClient = null;
+let generativeModel = null;
+
 // Función para inicializar Firebase Admin
 function initializeFirebase(credentials) {
   try {
@@ -39,6 +45,33 @@ function initializeFirebase(credentials) {
       console.log('Firebase Admin inicializado correctamente');
       firebaseInitialized = true;
       firebaseError = null;
+
+
+       // NUEVO: Inicializar Vertex AI después de que Firebase se inicialice correctamente
+    // Necesitarás el Project ID y la región. Puedes obtener el Project ID de las credenciales
+    // o configurarlo explícitamente.
+    const projectId = credentials.project_id || process.env.GOOGLE_CLOUD_PROJECT;
+    const location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1'; // O la región que uses
+
+    if (!projectId) {
+        console.error('Error: No se pudo determinar el Project ID para Vertex AI.');
+        // Podrías decidir si esto es un error fatal para la inicialización de Vertex AI
+        return true; // Firebase se inicializó, pero Vertex AI podría no estarlo.
+    }
+
+    vertexAIClient = new VertexAI({ project: projectId, location: location });
+    
+    // Configura el modelo específico que quieres usar
+    // Reemplaza 'gemini-1.5-flash-001' con tu modelo deseado
+    generativeModel = vertexAIClient.getGenerativeModel({
+        model: 'gemini-1.5-flash-001', 
+        generationConfig: {
+            responseMimeType: "application/json", // Para que Gemini intente devolver JSON
+        },
+        // safetySettings: [...] // Configura tus safety settings si es necesario
+    });
+    console.log(`Vertex AI Client y modelo ${'gemini-1.5-flash-001'} inicializados para el proyecto ${projectId} en ${location}.`);
+
       return true;
     } else {
       throw new Error('No se proporcionaron credenciales válidas');
@@ -129,6 +162,19 @@ const checkFirebaseInitialized = (req, res, next) => {
       error: firebaseError
     });
   }
+};
+
+// NUEVO: Middleware para verificar si Vertex AI está inicializado (opcional pero recomendado)
+const checkVertexAIInitialized = (req, res, next) => {
+    if (generativeModel) { // Verifica si el modelo está listo
+        next();
+    } else {
+        res.status(503).json({
+            success: false,
+            message: 'Vertex AI no está inicializado. Verifica la configuración del servidor.',
+            // Podrías tener un error específico para Vertex AI
+        });
+    }
 };
 
 // Endpoint para enviar notificaciones
@@ -316,6 +362,81 @@ app.post('/api/manage-subscription', checkFirebaseInitialized, async (req, res) 
     }
     return res.status(500).json({ success: false, error: message });
   }
+});
+
+
+
+app.post('/api/analyze-image-vertexai', checkFirebaseInitialized, checkVertexAIInitialized, async (req, res) => {
+    const { imageUrl } = req.body; // La URL de la imagen enviada desde el cliente Ionic/Android
+
+    if (!imageUrl) {
+        return res.status(400).json({ success: false, message: 'Se requiere la URL de la imagen (imageUrl).' });
+    }
+
+    // El prompt que usarás para Gemini
+    const prompt = `Analiza la imagen en la URL proporcionada y determina si contiene un objeto reciclable. Si es reciclable, clasifícalo en una de estas categorías: orgánico, plástico o aluminio. Si no es reciclable, indícalo. Devuelve el resultado en formato JSON como: { "isRecyclable": true, "category": "plástico" } o { "isRecyclable": false, "reason": "No es un objeto reciclable" }.`;
+
+    try {
+        console.log(`Analizando imagen con Vertex AI: ${imageUrl}`);
+ 
+        const nodeFetch = (await import('node-fetch')).default; // Para Node.js >= 18. Para <18, usa require('node-fetch')
+        const imageResponse = await nodeFetch(imageUrl);
+        
+        if (!imageResponse.ok) {
+            console.error('Error al descargar la imagen del URL:', imageUrl, imageResponse.statusText);
+            return res.status(500).json({ success: false, message: `No se pudo descargar la imagen desde la URL: ${imageResponse.statusText}` });
+        }
+
+        const imageBuffer = await imageResponse.arrayBuffer();
+        const imageBase64 = Buffer.from(imageBuffer).toString('base64');
+        const mimeType = imageResponse.headers.get('content-type') || 'image/jpeg'; // Obtener el mime type real
+
+        const imagePart = {
+            inlineData: {
+                data: imageBase64,
+                mimeType: mimeType,
+            },
+        };
+
+        const request = {
+            contents: [{ role: 'user', parts: [{ text: prompt }, imagePart] }],
+        };
+
+        // Envía la petición al modelo generativo
+        const streamingResp = await generativeModel.generateContentStream(request); // o generateContent si no necesitas streaming
+        
+        // Para obtener la respuesta completa si es un stream y esperas JSON
+        const aggregatedResponse = await streamingResp.response;
+        const resultText = aggregatedResponse.candidates[0].content.parts[0].text;
+
+        console.log('Respuesta cruda de Gemini (debería ser JSON):', resultText);
+
+        let analysisResult;
+        try {
+            analysisResult = JSON.parse(resultText);
+        } catch (parseError) {
+            console.error("Error al parsear la respuesta JSON de Gemini:", parseError);
+            console.error("Respuesta recibida que no es JSON:", resultText);
+            return res.status(500).json({ success: false, message: 'La respuesta del modelo no fue un JSON válido.', rawResponse: resultText });
+        }
+
+        console.log('Resultado del análisis:', analysisResult);
+        res.json({ success: true, data: analysisResult });
+
+    } catch (error) {
+        console.error('Error al analizar la imagen con Vertex AI:', error);
+        let errorMessage = 'Error interno del servidor al analizar la imagen.';
+        if (error.message) {
+            errorMessage = error.message;
+        }
+        // Algunos errores de Google Cloud pueden tener más detalles
+        if (error.details) { 
+            errorMessage += ` Detalles: ${error.details}`;
+        } else if (error.response && error.response.data) { // Errores de Axios u otros HTTP clients
+            errorMessage += ` Detalles: ${JSON.stringify(error.response.data)}`;
+        }
+        res.status(500).json({ success: false, message: errorMessage, errorDetails: error.toString() });
+    }
 });
 
 app.get('/', (req, res) => {

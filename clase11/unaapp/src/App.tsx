@@ -45,6 +45,7 @@ import PrivateRoute from "./routers/PrivateRoute";
 import Unauthorized from "./pages/Unauthorized";
 import LocationTracker from "./pages/LocationTracker";
 import Mapa from "./pages/Mapa";
+import CapturaFotoPage from "./components/capturarFotos/CapturaFoto";
 
 setupIonicReact();
 
@@ -63,7 +64,7 @@ const App: React.FC = () => {
             <PrivateRoute exact path='/perfil' allowedRoles={["admin", "user"]} component={Perfil} />
 
             <PrivateRoute exact path='/notificaciones' allowedRoles={["admin"]} component={Notificaciones} />
-
+            <PrivateRoute exact path='/capturafotopage' allowedRoles={["admin", "user" ]} component={CapturaFotoPage} />
             <Route exact path='/location'>
               <LocationTracker />
             </Route>
