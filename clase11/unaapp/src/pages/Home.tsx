@@ -5,19 +5,14 @@ import FirebaseStatus from "../components/cargarServicio";
 import Acelerometro from "../components/acelerometro";
 import BarCode from "../components/barCode/barCode";
 import CapturaFotoPage from "../components/capturarFotos/CapturaFoto";
+import QRCodeGenerator from "../components/QR/QRCodeGenerator";
 
 const Home: React.FC = () => {
   return (
     <IonPage>
       <AppHeader title='Home - Notifaciones' showMenuButton={true} />
-      <IonContent fullscreen>
-        <IonHeader collapse='condense'>
-          <IonToolbar>
-            <IonTitle size='large'>Home</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-      </IonContent>
-      <h1>Home</h1>
+      
+      <QRCodeGenerator />
       <CapturaFotoPage />
       <BarCode />
       <Acelerometro />

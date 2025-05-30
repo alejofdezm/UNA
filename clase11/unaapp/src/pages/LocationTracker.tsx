@@ -1,22 +1,17 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import LocationTrackerComponent from "../components/location/locationTracker";
 import "../theme/location/tracker.css";
+import AppHeader from "../components/head/AppHeader";
 
 const LocationTracker: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Location Tracker</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    
+      <AppHeader title='Location Tracker' showMenuButton={true} /> 
+      
       <IonContent fullscreen>
-        <IonHeader collapse='condense'>
-          <IonToolbar>
-            <IonTitle size='large'>Location Tracker</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <LocationTrackerComponent />
+    <LocationTrackerComponent />
+        
       </IonContent>
     </IonPage>
   );

@@ -46,6 +46,7 @@ import Unauthorized from "./pages/Unauthorized";
 import LocationTracker from "./pages/LocationTracker";
 import Mapa from "./pages/Mapa";
 import CapturaFotoPage from "./components/capturarFotos/CapturaFoto";
+import Ecanear from "./pages/Ecanear";
 
 setupIonicReact();
 
@@ -72,7 +73,9 @@ const App: React.FC = () => {
             <Route exact path='/mapa'>
               <Mapa />
             </Route>
-            
+            <Route exact path='/escanear'>
+            <Ecanear />
+            </Route>            
             <Route exact path='/'>
               <Redirect to='/home' />
             </Route>
