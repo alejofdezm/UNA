@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { 
-  IonCard, 
-  IonCardHeader, 
-  IonCardTitle, 
+  IonCard,  
   IonCardContent, 
   IonItem, 
   IonLabel, 
@@ -14,8 +12,7 @@ import {
 } from '@ionic/react';
 import { useAuth } from '../../contexts/authContext';
 
-
-// Definimos las opciones de intervalo en segundos
+ 
 const intervalOptions = [
   { label: '20 segundos', value: 20 },
   { label: '1 minuto', value: 60 },
@@ -23,7 +20,6 @@ const intervalOptions = [
   { label: '15 minutos', value: 900 },
   { label: '25 minutos', value: 1500 },
 ];
-
   const QRCodeGenerator: React.FC = () => {
   const { user } = useAuth();  
   const [qrData, setQrData] = useState<string>(''); 
@@ -41,34 +37,29 @@ const intervalOptions = [
       const generateQR = () => {
         const timestamp = Date.now();
         const dataToEncode = JSON.stringify({
-          userId: user.uid, // ID del usuario
-          email: user.email, // Puedes usar otro identificador si prefieres
-          timestamp: timestamp, // Marca de tiempo actual
-          selectedInterval: selectedInterval, // Intervalo seleccionado
+          userId: user.uid, 
+          email: user.email, 
+          timestamp: timestamp, 
+          selectedInterval: selectedInterval, 
         });
         setQrData(dataToEncode);
         console.log(`QR Regenerated at ${new Date(timestamp).toLocaleTimeString()}:`, dataToEncode);
       };
 
-      generateQR(); // Generar el QR inmediatamente al cargar o al cambiar dependencias
+      generateQR(); 
 
-      // Establecer un nuevo temporizador para regenerar el QR
       const timerId = setInterval(generateQR, selectedInterval * 1000);
       setCurrentTimerId(timerId);
     } else {
-      setQrData(''); // Limpiar QR si no hay usuario o email
-    }
-
-    // Función de limpieza: se ejecuta cuando el componente se desmonta
-    // o antes de que el efecto se vuelva a ejecutar si las dependencias cambian.
+      setQrData('');  
+    } 
     return () => {
       if (currentTimerId) {
         clearInterval(currentTimerId);
       }
     };
-  }, [user, selectedInterval]); // Dependencias del efecto
-
-  // Si no hay un usuario logueado, mostramos un mensaje.
+  }, [user, selectedInterval]); 
+ 
   if (!user?.uid) {
     return (
       <IonCard className="rounded-lg shadow-xl">
@@ -92,11 +83,8 @@ const intervalOptions = [
       </IonCard>
     );
   }
-
-  return (
-    <>
-    
-    <IonItem>
+ 
+  const renderQRCodeUI = () => <><IonItem>
   <IonLabel>Intervalo</IonLabel>
   <IonSelect
     value={selectedInterval}
@@ -131,6 +119,11 @@ const intervalOptions = [
           </div>
         )} 
     </IonCard></>
+
+  return (
+    <> 
+    {renderQRCodeUI()}
+   </>
   );
 };
 

@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1039306729106-bv5df0hsk96a0rs03bb3dm9le5uao1ml.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unaapp.appu",
+            "certificate_hash": "ffcfa0e981497eb46377cf268e7a0e7482ec6cde"
+          }
+        },
+        {
           "client_id": "1039306729106-hb5c79696karm089bv1cg4cm8ptgi6rn.apps.googleusercontent.com",
           "client_type": 3
         }
