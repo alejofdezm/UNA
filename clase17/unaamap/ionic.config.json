@@ -1,0 +1,7 @@
+{
+  "name": "unaamap",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
